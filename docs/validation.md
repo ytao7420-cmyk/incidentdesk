@@ -3,7 +3,7 @@
 ## Local checks
 
 - 22 Python rule tests cover the scope/role boundaries, source hash binding, exact citations, independent semantic disagreement, substantive citation rejection, immutable revisions, required challenge evidence and customer-only exact-revision acknowledgement.
-- 17 JavaScript tests pass: 8 adapter/reconciliation tests cover allowlisted endpoints, changing page metadata, changed update bodies, source identity, source limits and conservative reconciliation; 9 recovery regressions cover receipt identity, exact calldata, immutable historical revisions, later acknowledgement/challenge states, ambiguous matches, and CLI recovery forwarding.
+- 34 JavaScript tests pass: 8 adapter/reconciliation tests, 9 historical-recovery regressions, and 17 prebroadcast/recovery regressions. The latter execute the actual browser transport against SDK/provider/storage stubs: intent-before-send ordering, lost responses and reloads, storage failures, malformed records, wrong recovery identity/calldata/value/mode, exact state read-back, explicit wallet rejection, legacy pending records, and prevention of replacement sends.
 - Vite production build is required before release.
 
 The Python runtime is an explicit test stub with predetermined HTTP/model results. Unit tests **do not** establish actual network consensus, prompt-injection resistance, source truth, uptime or production readiness.
@@ -29,6 +29,12 @@ See `public/deployment.json` and `public/evidence/demo.json` for hashes and reco
 The live workflow recorded seven successful application writes (plus deployment): case open; first official capture; initial semantic evaluation; customer challenge; second official capture; new immutable evaluation; exact customer acknowledgement. It verifies the source hash, both frozen sources, old-revision immutability, changed outcome, all transaction executions, full majority validator consensus and final customer acknowledgement.
 
 `npm run verify` checks canonical source/revision/evidence hashes, citation membership, deterministic outcomes, revision-chain links, challenge resolutions, acknowledgement bindings and successful transaction metadata in the archive. It refuses an unverified placeholder archive. This offline verifier detects structural tampering, not arbitrary forged evidence backed by no chain; reviewers should also inspect the public transaction URLs and read the live contract.
+
+## Browser broadcast recovery regression
+
+The frontend now persists the complete intent before calling `writeContract`. A lost response or interrupted page leaves a recoverable intent and blocks subsequent writes. The recovery form accepts a user-supplied transaction hash, verifies sender/target/exact calldata from the Studionet RPC, saves the hash, and resumes receipt/state verification. Uncertain intents cannot be cleared as failures. Only explicit wallet rejection (EIP-1193 code 4001) or a verified terminal failed transaction releases the saved record, retaining diagnostic history.
+
+These 17 new regression tests are mocked transport/storage tests, not additional live-chain executions. Existing historical evaluation recovery remains covered. No contract or archived chain result changed.
 
 ## Read-only transaction recovery check
 

@@ -10,7 +10,31 @@ const key='incidentdesk.pending.v1';
 if(typeof window!=='undefined'){window.addEventListener('eip6963:announceProvider',e=>{if(e.detail?.info?.rdns&&e.detail?.provider?.request)providers.set(e.detail.info.rdns,e.detail.provider);});window.dispatchEvent(new Event('eip6963:requestProvider'));}
 export const deployment=config;
 export const getAddress=()=>address;
-export const getPending=()=>{try{return JSON.parse(localStorage.getItem(key));}catch{return null;}};
+// A missing journal is different from unreadable storage: uncertainty must block sends.
+export const getPending=()=>{try{const raw=localStorage.getItem(key);if(raw===null)return null;const saved=JSON.parse(raw);return saved&&typeof saved==='object'&&!Array.isArray(saved)?saved:{state:'unreadable'};}catch{return {state:'unreadable'};}};
+const actions={open_case:6,capture_incident:3,evaluate:1,challenge:3,acknowledge:2};
+function savePending(pending){const raw=JSON.stringify(pending);localStorage.setItem(key,raw);if(localStorage.getItem(key)!==raw)throw Error('Could not persist the transaction intent. New writes remain blocked.');}
+function validatePending(pending){
+  if(!pending||pending.state==='unreadable')throw Error('The saved transaction record cannot be read. Restore browser storage before continuing; new writes are blocked.');
+  if(!/^0x[\da-f]{40}$/i.test(pending.actor??'')||pending.address?.toLowerCase()!==config.address?.toLowerCase())throw Error('Pending actor or contract differs; inspect the saved transaction.');
+  if(pending.chainId!==undefined&&pending.chainId!==61999)throw Error('Pending network differs from Studionet.');
+  if(!Object.hasOwn(actions,pending.method)||!Array.isArray(pending.args)||pending.args.length!==actions[pending.method]||pending.args.some(v=>typeof v!=='string'))throw Error('Saved call is invalid; inspect the transaction intent.');
+  if((pending.value!==undefined&&pending.value!=='0')||(pending.leaderOnly!==undefined&&pending.leaderOnly!==false))throw Error('Saved transaction is not a zero-value full-validator call.');
+  if(pending.hash&&!/^0x[\da-f]{64}$/i.test(pending.hash))throw Error('Saved transaction hash is invalid.');
+  return pending;
+}
+function isWalletRejection(error){const seen=new Set();for(let item=error;item&&typeof item==='object'&&!seen.has(item);item=item.cause??item.data?.originalError){seen.add(item);if(item.code===4001)return true;}return false;}
+function samePending(pending){if(canonical(getPending())!==canonical(pending))throw Error('The saved transaction changed in another tab. Inspect it before continuing.');}
+// Recovery never trusts a user-entered hash by itself. Check the RPC transaction's
+// sender, destination, exact ABI call and value before associating it with intent.
+export function verifyTransactionIdentity(pending,receipt){
+  if(!/^0x[\da-f]{64}$/i.test(pending.hash??'')||String(receipt?.hash??'').toLowerCase()!==pending.hash.toLowerCase()||String(receipt?.from_address??receipt?.from).toLowerCase()!==pending.actor.toLowerCase()||String(receipt?.to_address??receipt?.to).toLowerCase()!==pending.address.toLowerCase())throw Error('Transaction receipt identity differs from the saved intent.');
+  const expected=abi.calldata.encode(abi.calldata.makeCalldataObject(pending.method,pending.args,undefined)),raw=receipt.data?.calldata?.raw;
+  if(!Array.isArray(raw)||raw.length!==expected.length||raw.some((byte,i)=>byte!==expected[i]))throw Error('Transaction receipt calldata differs from the saved call.');
+  if(receipt.value!==undefined){let value;try{value=BigInt(receipt.value);}catch{throw Error('Transaction value cannot be verified.');}if(value!==0n)throw Error('Transaction value differs from the zero-value intent.');}
+  if(receipt.leader_only!==undefined&&receipt.leader_only!==false)throw Error('Transaction does not use the saved full-validator mode.');
+  return receipt;
+}
 export const txURL=hash=>/^0x[\da-f]{64}$/i.test(hash??'')?`${config.explorer}/tx/${hash}`:'';
 function ready(){if(!config.deployed||!/^0x[\da-f]{40}$/i.test(config.address??''))throw Error('Live deployment is not configured yet.');}
 async function network(p){if(Number(await p.request({method:'eth_chainId'}))!==61999){try{await p.request({method:'wallet_switchEthereumChain',params:[{chainId:'0xf22f'}]});}catch(e){if(e.code!==4902&&e?.data?.originalError?.code!==4902)throw e;await p.request({method:'wallet_addEthereumChain',params:[{chainId:'0xf22f',chainName:'GenLayer Studionet',nativeCurrency:{name:'GEN',symbol:'GEN',decimals:18},rpcUrls:[config.rpc],blockExplorerUrls:[config.explorer]}]});}}if(Number(await p.request({method:'eth_chainId'}))!==61999)throw Error('Select GenLayer Studionet 61999.');}
@@ -23,10 +47,7 @@ async function wait(hash,notify){for(let n=0;n<90;n++){let r;try{r=await reader.
 // outputs fail closed and retain the pending hash for inspection.
 export function evaluationRevision(pending,receipt,record){
   assertExecutionSucceeded(receipt);
-  if(receipt.hash!==pending.hash||String(receipt.from_address??receipt.from).toLowerCase()!==pending.actor.toLowerCase()||String(receipt.to_address??receipt.to).toLowerCase()!==pending.address.toLowerCase())throw Error('Evaluation receipt identity differs from the saved transaction.');
-  const expected=abi.calldata.encode(abi.calldata.makeCalldataObject(pending.method,pending.args,undefined));
-  const raw=receipt.data?.calldata?.raw;
-  if(!Array.isArray(raw)||raw.length!==expected.length||raw.some((byte,i)=>byte!==expected[i]))throw Error('Evaluation receipt calldata differs from the saved call.');
+  verifyTransactionIdentity(pending,receipt);
   const entries=receipt.consensus_data?.leader_receipt;
   const leader=(Array.isArray(entries)?entries:[entries]).filter(r=>r?.mode==='leader').at(-1);
   const blocks=leader?.eq_outputs;
@@ -44,8 +65,65 @@ export function evaluationRevision(pending,receipt,record){
 }
 
 export function verifyAction(method,args,record){if(record.id!==args[0])throw Error('Read-back case mismatch');if(method==='open_case'&&(record.customer!==args[1].toLowerCase()||record.scope.feature!==args[3]))throw Error('Opened scope differs');if(method==='capture_incident'&&!record.evidence.some(e=>e.projection.incident_id===args[1]&&e.sha256===args[2]))throw Error('Snapshot missing after transaction');if(method==='challenge'&&!record.challenges.some(c=>c.base_digest===args[1]&&c.reason===args[2]))throw Error('Challenge missing');if(method==='evaluate')throw Error('Evaluate requires receipt-bound immutable revision verification.');if(method==='acknowledge'&&!record.acknowledgements.some(a=>a.revision_digest===args[1]))throw Error('Acknowledgement missing');return record;}
-async function finish(pending,notify){const receipt=await wait(pending.hash,notify);const record=await readCase(pending.args[0]);let revision;if(pending.method==='evaluate'){revision=evaluationRevision(pending,receipt,record);}else{verifyAction(pending.method,pending.args,record);}localStorage.removeItem(key);notify({phase:'success',message:revision?`Execution and immutable revision ${revision.number} verified from this transaction receipt; current case may have advanced.`:'Execution and exact resulting state verified.',hash:pending.hash});return record;}
-export async function write(method,args,notify){ready();if(busy||getPending())throw Error('Resume the pending transaction before another write.');if(!client)throw Error('Connect your wallet first.');if(!['open_case','capture_incident','evaluate','challenge','acknowledge'].includes(method))throw Error('Unsupported action');busy=true;try{const accounts=await wallet.request({method:'eth_accounts'});if(accounts[0]?.toLowerCase()!==address.toLowerCase())throw Error('Wallet account changed. Reconnect first.');await network(wallet);notify({phase:'signing',message:'Review the zero-value Studionet transaction in MetaMask.'});const hash=await client.writeContract({address:config.address,functionName:method,args,value:0n,leaderOnly:false});const pending={hash,method,args,address:config.address,actor:address};localStorage.setItem(key,JSON.stringify(pending));return await finish(pending,notify);}catch(e){notify({phase:'error',message:e.message,hash:getPending()?.hash});throw e;}finally{busy=false;}}
-export async function resume(notify){ready();const pending=getPending();if(!pending||busy)throw Error('No resumable transaction');if(pending.address!==config.address)throw Error('Pending contract differs; inspect saved transaction.');busy=true;try{return await finish(pending,notify);}finally{busy=false;}}
-export async function inspectPending(){const p=getPending();if(!p)return null;const receipt=await reader.getTransaction({hash:p.hash});if(!terminalStatus(receipt))throw Error('This transaction is not terminal. Resume later.');try{assertExecutionSucceeded(receipt);throw Error('Successful transaction must be resumed for state verification.');}catch(e){if(e.message.startsWith('Successful'))throw e;const explicitFailure=executionEvidence(receipt).result==='ERROR'||['CANCELED','CANCELLED'].includes(lifecycleStatus(receipt));if(!explicitFailure)throw Error('Terminal status is ambiguous; keep the saved hash and inspect its receipt before any retry.');return {pending:p,error:e.message};}}
-export async function clearFailedPending(){const evidence=await inspectPending();if(!evidence)throw Error('No pending transaction');localStorage.setItem('incidentdesk.last-failed.v1',JSON.stringify(evidence));localStorage.removeItem(key);return evidence;}
+async function finish(pending,notify){
+  const receipt=await wait(pending.hash,notify);verifyTransactionIdentity(pending,receipt);
+  const record=await readCase(pending.args[0]);let revision;
+  if(pending.method==='evaluate')revision=evaluationRevision(pending,receipt,record);else verifyAction(pending.method,pending.args,record);
+  samePending(pending);localStorage.removeItem(key);
+  notify({phase:'success',message:revision?`Execution and immutable revision ${revision.number} verified from this transaction receipt; current case may have advanced.`:'Execution and exact resulting state verified.',hash:pending.hash});return record;
+}
+export async function write(method,args,notify){
+  ready();if(busy||getPending())throw Error('Resolve the saved transaction intent before another write.');
+  if(!client)throw Error('Connect your wallet first.');
+  if(!Object.hasOwn(actions,method)||!Array.isArray(args)||args.length!==actions[method]||args.some(v=>typeof v!=='string'))throw Error('Unsupported action or arguments');
+  busy=true;let intent,knownHash,enteredSdk=false;
+  try{
+    const accounts=await wallet.request({method:'eth_accounts'});if(accounts[0]?.toLowerCase()!==address.toLowerCase())throw Error('Wallet account changed. Reconnect first.');await network(wallet);
+    if(getPending())throw Error('Another transaction intent already exists. Resolve it first.');
+    intent={version:2,state:'prepared',intentId:crypto.randomUUID(),createdAt:new Date().toISOString(),chainId:61999,method,args:[...args],address:config.address,actor:address,value:'0',leaderOnly:false,hash:null};
+    savePending(intent); // Must succeed before the SDK can request a signature or broadcast.
+    notify({phase:'signing',message:'Intent saved. Review the zero-value Studionet transaction in MetaMask.'});
+    samePending(intent);
+    enteredSdk=true;knownHash=await client.writeContract({address:config.address,functionName:method,args:intent.args,value:0n,leaderOnly:false});
+    if(!/^0x[\da-f]{64}$/i.test(knownHash??''))throw Error('The wallet did not return a valid transaction hash.');
+    samePending(intent);const pending={...intent,state:'submitted',hash:knownHash};savePending(pending);
+    return await finish(pending,notify);
+  }catch(e){
+    // EIP-1193 4001 explicitly means the user rejected the wallet request.
+    // Other SDK errors may occur after the node accepted the transaction.
+    if(enteredSdk&&!knownHash&&isWalletRejection(e)){
+      samePending(intent);localStorage.setItem('incidentdesk.last-rejected.v1',JSON.stringify({intent,message:e.message}));localStorage.removeItem(key);
+    }
+    const saved=getPending(),uncertain=intent&&saved&&!saved.hash;
+    const message=uncertain?'Broadcast outcome is unknown; no replacement will be sent. Recover the transaction hash from wallet activity or the explorer. '+e.message:e.message;
+    notify({phase:'error',message,hash:knownHash??saved?.hash});throw Error(message,{cause:e});
+  }finally{busy=false;}
+}
+export async function resume(notify){
+  ready();if(busy)throw Error('A transaction check is already running.');const pending=validatePending(getPending());
+  if(!pending.hash)throw Error('Broadcast outcome is unknown. Supply its transaction hash for verified recovery; no replacement will be sent.');
+  busy=true;try{return await finish(pending,notify);}finally{busy=false;}
+}
+export async function recover(hash,notify){
+  ready();if(busy)throw Error('A transaction check is already running.');const intent=validatePending(getPending());
+  if(intent.hash)throw Error('A hash is already saved. Resume that transaction.');
+  if(!/^0x[\da-f]{64}$/i.test(hash??''))throw Error('Enter a complete 0x transaction hash.');
+  busy=true;try{
+    const pending={...intent,state:'submitted',hash};
+    const receipt=await reader.getTransaction({hash});verifyTransactionIdentity(pending,receipt);
+    samePending(intent);savePending(pending);
+    notify({phase:'pending',message:'Recovered hash matches the saved sender, contract and exact call. Checking execution and state.',hash});
+    return await finish(pending,notify);
+  }finally{busy=false;}
+}
+export async function inspectPending(){
+  const p=validatePending(getPending());if(!p.hash)throw Error('Unknown broadcast cannot be cleared. Recover and verify its transaction hash first.');
+  const receipt=await reader.getTransaction({hash:p.hash});verifyTransactionIdentity(p,receipt);
+  if(!terminalStatus(receipt))throw Error('This transaction is not terminal. Resume later.');
+  try{assertExecutionSucceeded(receipt);throw Error('Successful transaction must be resumed for state verification.');}
+  catch(e){if(e.message.startsWith('Successful'))throw e;const explicitFailure=executionEvidence(receipt).result==='ERROR'||['CANCELED','CANCELLED'].includes(lifecycleStatus(receipt));if(!explicitFailure)throw Error('Terminal status is ambiguous; keep the saved hash and inspect its receipt before any retry.');return {pending:p,error:e.message};}
+}
+export async function clearFailedPending(){
+  if(busy)throw Error('A transaction check is already running.');busy=true;
+  try{const evidence=await inspectPending();samePending(evidence.pending);localStorage.setItem('incidentdesk.last-failed.v1',JSON.stringify(evidence));localStorage.removeItem(key);return evidence;}finally{busy=false;}
+}

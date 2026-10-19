@@ -13,7 +13,9 @@ An incident evidence workspace on GenLayer. A case freezes a specific service fe
 5. Either participant challenges the current revision. Additional official evidence is required before a new revision; the old revision remains intact.
 6. Only the designated customer can acknowledge the exact current revision. Old acknowledgements never silently carry over to later revisions.
 
-The UI supports recorded chain evidence, live reads, wallet writes, pending transaction recovery, frozen source inspection, revision selection and a chronological challenge/acknowledgement record.
+The UI supports recorded chain evidence, live reads, wallet writes, pending transaction recovery, frozen source inspection, revision selection and a chronological challenge/acknowledgement record. Before the SDK can broadcast, the browser persists the exact action intent. If the response is lost, new writes stay blocked across reloads until the user supplies a transaction hash whose sender, contract and ABI calldata match the saved intent. Recovery only reads the existing transaction; it does not send a replacement. Explicit EIP-1193 user rejection is retained locally and releases its unbroadcast intent. Browser storage must remain intact for recovery.
+
+Local checks: **34 JavaScript tests and 22 Python contract tests**. The browser recovery regressions use SDK/provider stubs and make no chain writes; the published live case predates this frontend transport fix.
 
 ## Run locally
 

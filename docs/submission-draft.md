@@ -19,8 +19,8 @@ Six short instructions:
 5. Verify the customer acknowledgement binds to revision 2's exact digest. Follow the source and contract links to reproduce the record.
 6. Switch to Live contract and connect MetaMask on Studionet. Open a separate synthetic case, capture official evidence, evaluate, challenge and acknowledge.
 
-Expected verification: The recorded case has two immutable revisions, a resolved challenge, two frozen official incident sources, and an exact customer acknowledgement of revision 2. Public receipts must show successful full-validator execution. If the chain archive is not verified, do not submit this expectation as an achieved result.
+Expected verification: The recorded case has two immutable revisions, a resolved challenge, two frozen official incident sources, and an exact customer acknowledgement of revision 2. The recorded public receipts show successful full-validator execution.
 
 GitHub: https://github.com/ytao7420-cmyk/incidentdesk
-Website: pending publication
+Website: https://incidentdesk-genlayer-57.sales136152.chatgpt.site
 Contract: https://explorer-studio.genlayer.com/address/0x461bCf6a09D2a0358003379dd7B356C91B3074B4
