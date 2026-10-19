@@ -1,0 +1,20 @@
+{
+  "url": "https://www.githubstatus.com/api/v2/incidents/6yk962mhlr3h.json",
+  "projection": {
+    "provider": "github",
+    "incident_id": "6yk962mhlr3h",
+    "name": "[Retroactive] Actions workflow run logs delayed",
+    "status": "resolved",
+    "updates": [
+      {
+        "id": "zvwyt4qrb606",
+        "status": "resolved",
+        "body": "On October 13, around 20:42 UTC, an infrastructure failure caused GitHub Actions to have delays showing logs for workflow runs. No logs were lost and the issue has now been resolved and log processing has caught up.\n\nThe actual workflows producing the logs were not impacted and ran normally and no run delays or check delays occurred.",
+        "display_at": "2026-10-13T20:30:00.000Z"
+      }
+    ]
+  },
+  "sha256": "b50be36bd90e906bb4979f658aac3681c8e3f223e43147f463524bf4f48aaf7e",
+  "retrievedAt": "2026-10-19T09:27:50.858Z",
+  "notice": "Hash binds canonical meaningful incident projection. Volatile page metadata and notification delivery metadata are excluded; update text/status/display date are preserved exactly."
+}

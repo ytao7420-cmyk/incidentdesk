@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {canonical,projectIncident,incidentURL,outcome} from '../lib/model.js';
+test('canonical hashes ignore object insertion order',()=>assert.equal(canonical({z:1,a:{c:2,b:3}}),'{"a":{"b":3,"c":2},"z":1}'));
+test('only official fixed incident endpoints accepted',()=>{assert.throws(()=>incidentURL('custom','abcdefghijkl'));assert.throws(()=>incidentURL('github','../../private'));assert.equal(incidentURL('github','abcdefghijkl'),'https://www.githubstatus.com/api/v2/incidents/abcdefghijkl.json');});
+const raw=()=>({page:{updated_at:'changes'},incident:{id:'abcdefghijkl',page_id:'kctbh9vrtdwd',name:'Incident',status:'resolved',incident_updates:[{id:'abc',incident_id:'abcdefghijkl',status:'resolved',body:'Normal operation.',display_at:'2026-10-12T10:00:00Z'}]}});
+test('volatile page metadata never affects frozen projection',()=>{const a=raw(),b=raw();b.page.updated_at='later';assert.deepEqual(projectIncident(a,'github','abcdefghijkl'),projectIncident(b,'github','abcdefghijkl'));});
+test('updated source text changes projection',()=>{const a=raw(),b=raw();b.incident.incident_updates[0].body='Correction.';assert.notEqual(canonical(projectIncident(a,'github','abcdefghijkl')),canonical(projectIncident(b,'github','abcdefghijkl')));});
+test('no silently truncated official evidence',()=>{const a=raw();a.incident.incident_updates[0].body='x'.repeat(10001);assert.throws(()=>projectIncident(a,'github','abcdefghijkl'));});
+test('wrong page ownership rejected',()=>{const a=raw();a.incident.page_id='other';assert.throws(()=>projectIncident(a,'github','abcdefghijkl'));});
+test('different scoped incidents reconcile conservatively',()=>{const f=i=>({semantics:{scope:'IN_SCOPE',window:'IN_WINDOW',impact:i}});assert.equal(outcome([f('EXPLICIT_NO_IMPACT'),f('REPORTED_IMPACT')]),'OPERATOR_REPORTED_IMPACT');assert.equal(outcome([f('UNESTABLISHED')]),'INCONCLUSIVE');});
+test('empty evidence is not healthy',()=>assert.equal(outcome([]),'NO_SCOPED_EVIDENCE'));

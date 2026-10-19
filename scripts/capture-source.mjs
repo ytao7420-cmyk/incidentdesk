@@ -1,0 +1,9 @@
+import {createHash} from 'node:crypto';
+import {writeFile,readFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {canonical,projectIncident,incidentURL} from '../lib/model.js';
+export const sha256=v=>createHash('sha256').update(v).digest('hex');
+export const PRESET={caseId:'actions-oct12-14',provider:'github',feature:'GitHub Actions workflow execution (not log display or delivery)',from:'2026-10-12',to:'2026-10-14',incidents:['6yk962mhlr3h','93njd414rpbx'],notice:'Historical official operator statements. Synthetic dispute and self-controlled test actors; no customer incidents, measured uptime, SLA or compensation claims.'};
+export async function capture(provider,id){const url=incidentURL(provider,id),res=await fetch(url);if(!res.ok)throw Error(`HTTP ${res.status} for ${url}`);const bytes=new Uint8Array(await res.arrayBuffer());if(bytes.length>100000)throw Error('Official payload exceeds maximum');const projection=projectIncident(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes)),provider,id);return {url,projection,sha256:sha256(canonical(projection)),retrievedAt:new Date().toISOString(),notice:'Hash binds canonical meaningful incident projection. Volatile page metadata and notification delivery metadata are excluded; update text/status/display date are preserved exactly.'};}
+export async function loadSources(){const result=[];for(const id of PRESET.incidents)result.push(JSON.parse(await readFile(new URL(`../public/sources/${id}.json`,import.meta.url),'utf8')));return result;}
+if(process.argv[1]===fileURLToPath(import.meta.url)){for(const id of PRESET.incidents){const data=await capture(PRESET.provider,id);await writeFile(new URL(`../public/sources/${id}.json`,import.meta.url),JSON.stringify(data,null,2)+'\n');console.log(JSON.stringify({id,sha256:data.sha256,url:data.url}));}}

@@ -1,0 +1,494 @@
+{
+  "verified": true,
+  "recordedAt": "2026-10-19T09:39:26.864Z",
+  "chainId": 61999,
+  "network": "GenLayer Studionet",
+  "contractAddress": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+  "contractSourceSha256": "c25dd12beceb4bee7acf1fc34031a473bc256d560adcee6c99c0ff34d7c3d4ab",
+  "notice": "Historical official operator statements. Synthetic dispute and self-controlled test actors; no customer incidents, measured uptime, SLA or compensation claims.",
+  "actors": {
+    "operator": "0xEE9eBf43929c75EA00c8d9068E6cb4492890Bd5C",
+    "customer": "0x9bE0FA4597C8F5E43DF781eDC11Fb38af6010f0c"
+  },
+  "cases": [
+    {
+      "acknowledgements": [
+        {
+          "customer": "0x9be0fa4597c8f5e43df781edc11fb38af6010f0c",
+          "revision": 2,
+          "revision_digest": "fbe3d309d9267eac03946f15f0b6ae1719f8aa8cfe7376a136a5b6399d87f481"
+        }
+      ],
+      "challenges": [
+        {
+          "author": "0x9be0fa4597c8f5e43df781edc11fb38af6010f0c",
+          "base_digest": "86ea229108009883e92c272e3543405c124f2babda7cfd8861229f32232f5807",
+          "evidence_count_before": 1,
+          "number": 1,
+          "reason": "The frozen window also includes the October 12 Actions incident. Add its official postmortem before acknowledging the review.",
+          "resolution_digest": "fbe3d309d9267eac03946f15f0b6ae1719f8aa8cfe7376a136a5b6399d87f481",
+          "status": "RESOLVED"
+        }
+      ],
+      "customer": "0x9be0fa4597c8f5e43df781edc11fb38af6010f0c",
+      "evidence": [
+        {
+          "digest": "1cd640f88d3c5ce45f1ddb038bca28393b7c4f745dded5d7e5f879c2b18e6730",
+          "number": 1,
+          "projection": {
+            "incident_id": "6yk962mhlr3h",
+            "name": "[Retroactive] Actions workflow run logs delayed",
+            "provider": "github",
+            "status": "resolved",
+            "updates": [
+              {
+                "body": "On October 13, around 20:42 UTC, an infrastructure failure caused GitHub Actions to have delays showing logs for workflow runs. No logs were lost and the issue has now been resolved and log processing has caught up.\n\nThe actual workflows producing the logs were not impacted and ran normally and no run delays or check delays occurred.",
+                "display_at": "2026-10-13T20:30:00.000Z",
+                "id": "zvwyt4qrb606",
+                "status": "resolved"
+              }
+            ]
+          },
+          "sha256": "b50be36bd90e906bb4979f658aac3681c8e3f223e43147f463524bf4f48aaf7e",
+          "submitted_by": "0xee9ebf43929c75ea00c8d9068e6cb4492890bd5c",
+          "url": "https://www.githubstatus.com/api/v2/incidents/6yk962mhlr3h.json"
+        },
+        {
+          "digest": "caa365c1ddd0e8b0a956166204102dd9fccf5384912b2704ec8bdd04837e2a4c",
+          "number": 2,
+          "projection": {
+            "incident_id": "93njd414rpbx",
+            "name": "Incident with Actions, Pull Requests and Issues",
+            "provider": "github",
+            "status": "resolved",
+            "updates": [
+              {
+                "body": "We are investigating reports of degraded performance for Actions, Issues and Pull Requests",
+                "display_at": "2026-10-12T12:21:48.115Z",
+                "id": "tysn3wg7m41g",
+                "status": "investigating"
+              },
+              {
+                "body": "Users may experience issues loading the Actions tab UI, interacting with the Checks API, queueing new Actions runs, creating and updating issues, and requesting PR reviews, including via REST and GraphQL APIs.",
+                "display_at": "2026-10-12T12:33:21.895Z",
+                "id": "j38yvdtzr9x9",
+                "status": "investigating"
+              },
+              {
+                "body": "We have a mitigation in progress and are monitoring for recovery. Users may also experience delayed web notifications as we mitigate.",
+                "display_at": "2026-10-12T12:57:44.849Z",
+                "id": "zmz2v8k064c2",
+                "status": "investigating"
+              },
+              {
+                "body": "Pull Requests is operating normally.",
+                "display_at": "2026-10-12T13:02:17.366Z",
+                "id": "k4j0qc2m06kk",
+                "status": "investigating"
+              },
+              {
+                "body": "Our initial mitigation was not fully successful, and users may still experience delays and errors with Actions, issues and projects, and notifications are delayed. We're continuing to investigate the root cause and work on additional mitigations.",
+                "display_at": "2026-10-12T13:38:44.570Z",
+                "id": "m8vb4xnqflf2",
+                "status": "investigating"
+              },
+              {
+                "body": "The degradation affecting Issues has been mitigated. We are monitoring to ensure stability.",
+                "display_at": "2026-10-12T14:35:49.253Z",
+                "id": "dm86254lyfv2",
+                "status": "investigating"
+              },
+              {
+                "body": "The degradation affecting Actions has been mitigated. We are monitoring to ensure stability.",
+                "display_at": "2026-10-12T14:36:09.442Z",
+                "id": "xy199q3gk8bl",
+                "status": "investigating"
+              },
+              {
+                "body": "We have mitigated the issues with Actions, issues, and projects, and have a mitigation in progress to address the delay with notifications.",
+                "display_at": "2026-10-12T14:37:49.319Z",
+                "id": "skflhlry30jv",
+                "status": "investigating"
+              },
+              {
+                "body": "We have successfully applied a mitigation for notifications, and notifications have resumed but will continue to be delayed as we work through a backlog.",
+                "display_at": "2026-10-12T15:19:00.679Z",
+                "id": "3tt4vzhcsgds",
+                "status": "investigating"
+              },
+              {
+                "body": "Notifications have resumed but will continue to be delayed as we work through a backlog.",
+                "display_at": "2026-10-12T15:50:39.420Z",
+                "id": "m93mr02jbyp0",
+                "status": "investigating"
+              },
+              {
+                "body": "Web and email notifications continue to be delayed as we work through a backlog of notifications.",
+                "display_at": "2026-10-12T17:34:24.812Z",
+                "id": "0byszqkbwv74",
+                "status": "investigating"
+              },
+              {
+                "body": "Web and email notifications will be delayed for 1 more hour as we are close to completing the backlog of notifications.",
+                "display_at": "2026-10-12T19:28:42.836Z",
+                "id": "1jw376d9q3h8",
+                "status": "investigating"
+              },
+              {
+                "body": "On October 12th 2026 11:51 UTC GitHub experienced elevated 500 responses across several application pages. This caused failures on Issues and Pull Requests as well as Projects and Actions. Customers also experienced delayed notifications in their web inbox and via email. <br /><br />The immediate impact to Issues, Pull Requests, Projects, and Actions was mitigated by 12:41 UTC on October 12th. Notifications deliveries to the web inbox and via email were recovering at 15:27 UTC and fully mitigated by 20:16 UTC. <br /><br />The incident was triggered through a latent condition in our notifications delivery pipeline that put a high volume of an expensive query on our sharded database replicas. This reduced available database capacity to serve requests for Issues, Pull Requests, Projects, and Actions.<br /><br />We have fixed the notifications pipeline’s code path that issued the expensive query. We are also improving resilience of the database layer to reduce the likelihood and impact of similar incidents.",
+                "display_at": "2026-10-12T20:16:07.447Z",
+                "id": "zypcxn80fzqb",
+                "status": "resolved"
+              }
+            ]
+          },
+          "sha256": "f99b060706bce7b61f41d86d56c6db3fdd12140e11801f1a477b32d29c010e69",
+          "submitted_by": "0x9be0fa4597c8f5e43df781edc11fb38af6010f0c",
+          "url": "https://www.githubstatus.com/api/v2/incidents/93njd414rpbx.json"
+        }
+      ],
+      "id": "actions-oct12-14",
+      "operator": "0xee9ebf43929c75ea00c8d9068e6cb4492890bd5c",
+      "revisions": [
+        {
+          "digest": "86ea229108009883e92c272e3543405c124f2babda7cfd8861229f32232f5807",
+          "evidence_digests": [
+            "1cd640f88d3c5ce45f1ddb038bca28393b7c4f745dded5d7e5f879c2b18e6730"
+          ],
+          "findings": [
+            {
+              "evidence_digest": "1cd640f88d3c5ce45f1ddb038bca28393b7c4f745dded5d7e5f879c2b18e6730",
+              "evidence_number": 1,
+              "incident_id": "6yk962mhlr3h",
+              "semantics": {
+                "citations": [
+                  {
+                    "quote": "On October 13, around 20:42 UTC, an infrastructure failure caused GitHub Actions to have delays showing logs for workflow runs.",
+                    "update_id": "zvwyt4qrb606"
+                  },
+                  {
+                    "quote": "The actual workflows producing the logs were not impacted and ran normally and no run delays or check delays occurred.",
+                    "update_id": "zvwyt4qrb606"
+                  }
+                ],
+                "impact": "EXPLICIT_NO_IMPACT",
+                "reason": "The incident occurred on October 13, which is within the specified window. While the incident involved log delivery delays, the operator explicitly stated that the actual workflows (the scoped feature) were not impacted and ran normally.",
+                "scope": "IN_SCOPE",
+                "window": "IN_WINDOW"
+              }
+            }
+          ],
+          "number": 1,
+          "outcome": "EXPLICIT_NO_IMPACT_IN_CAPTURED_INCIDENTS",
+          "previous_digest": null,
+          "provenance": "official operator statements; NOT measured uptime or authenticated customer impact",
+          "scope_digest": "1c68c7d063f32272f825f76f011bca3fd682202f787ed4e4b9bf0e04c1d4ca25"
+        },
+        {
+          "digest": "fbe3d309d9267eac03946f15f0b6ae1719f8aa8cfe7376a136a5b6399d87f481",
+          "evidence_digests": [
+            "1cd640f88d3c5ce45f1ddb038bca28393b7c4f745dded5d7e5f879c2b18e6730",
+            "caa365c1ddd0e8b0a956166204102dd9fccf5384912b2704ec8bdd04837e2a4c"
+          ],
+          "findings": [
+            {
+              "evidence_digest": "1cd640f88d3c5ce45f1ddb038bca28393b7c4f745dded5d7e5f879c2b18e6730",
+              "evidence_number": 1,
+              "incident_id": "6yk962mhlr3h",
+              "semantics": {
+                "citations": [
+                  {
+                    "quote": "On October 13, around 20:42 UTC, an infrastructure failure caused GitHub Actions to have delays showing logs for workflow runs.",
+                    "update_id": "zvwyt4qrb606"
+                  },
+                  {
+                    "quote": "The actual workflows producing the logs were not impacted and ran normally and no run delays or check delays occurred.",
+                    "update_id": "zvwyt4qrb606"
+                  }
+                ],
+                "impact": "EXPLICIT_NO_IMPACT",
+                "reason": "The incident is about GitHub Actions, and the operator explicitly distinguishes delayed log display from workflow execution. It states the occurrence was on October 13, which falls within 2026-10-12 to 2026-10-14 UTC, and expressly says workflows were not impacted and ran normally with no run or check delays.",
+                "scope": "IN_SCOPE",
+                "window": "IN_WINDOW"
+              }
+            },
+            {
+              "evidence_digest": "caa365c1ddd0e8b0a956166204102dd9fccf5384912b2704ec8bdd04837e2a4c",
+              "evidence_number": 2,
+              "incident_id": "93njd414rpbx",
+              "semantics": {
+                "citations": [
+                  {
+                    "quote": "Users may experience issues loading the Actions tab UI, interacting with the Checks API, queueing new Actions runs, creating and updating issues, and requesting PR reviews, including via REST and GraphQL APIs.",
+                    "update_id": "j38yvdtzr9x9"
+                  },
+                  {
+                    "quote": "On October 12th 2026 11:51 UTC GitHub experienced elevated 500 responses across several application pages.",
+                    "update_id": "zypcxn80fzqb"
+                  },
+                  {
+                    "quote": "This caused failures on Issues and Pull Requests as well as Projects and Actions.",
+                    "update_id": "zypcxn80fzqb"
+                  },
+                  {
+                    "quote": "The immediate impact to Issues, Pull Requests, Projects, and Actions was mitigated by 12:41 UTC on October 12th.",
+                    "update_id": "zypcxn80fzqb"
+                  }
+                ],
+                "impact": "REPORTED_IMPACT",
+                "reason": "The scoped feature is GitHub Actions workflow execution. Official updates explicitly mention trouble \"queueing new Actions runs,\" which matches workflow execution rather than log delivery/UI alone. The incident occurred on 2026-10-12, which is within the 2026-10-12 to 2026-10-14 UTC window. Later resolved text says the incident \"caused failures\" on Actions and gives the occurrence time and mitigation time on Oct 12, superseding earlier tentative language.",
+                "scope": "IN_SCOPE",
+                "window": "IN_WINDOW"
+              }
+            }
+          ],
+          "number": 2,
+          "outcome": "OPERATOR_REPORTED_IMPACT",
+          "previous_digest": "86ea229108009883e92c272e3543405c124f2babda7cfd8861229f32232f5807",
+          "provenance": "official operator statements; NOT measured uptime or authenticated customer impact",
+          "scope_digest": "1c68c7d063f32272f825f76f011bca3fd682202f787ed4e4b9bf0e04c1d4ca25"
+        }
+      ],
+      "scope": {
+        "feature": "GitHub Actions workflow execution (not log display or delivery)",
+        "from_date": "2026-10-12",
+        "provider": "github",
+        "time_basis": "inclusive UTC calendar dates; not measured duration",
+        "to_date": "2026-10-14"
+      },
+      "scope_digest": "1c68c7d063f32272f825f76f011bca3fd682202f787ed4e4b9bf0e04c1d4ca25",
+      "state": "ACKNOWLEDGED"
+    }
+  ],
+  "transactions": [
+    {
+      "label": "open",
+      "spec": {
+        "kind": "call",
+        "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+        "actor": "0xEE9eBf43929c75EA00c8d9068E6cb4492890Bd5C",
+        "method": "open_case",
+        "args": [
+          "actions-oct12-14",
+          "0x9bE0FA4597C8F5E43DF781eDC11Fb38af6010f0c",
+          "github",
+          "GitHub Actions workflow execution (not log display or delivery)",
+          "2026-10-12",
+          "2026-10-14"
+        ],
+        "value": "0",
+        "leaderOnly": false
+      },
+      "intendedAt": "2026-10-19T09:36:27.769Z",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "hash": "0xad698cce0c6f4bf008dd550ea69da3a39f1a07b44340cb80b6955ac3275c9463",
+      "submittedAt": "2026-10-19T09:36:31.561Z",
+      "executionResult": "SUCCESS",
+      "consensusResult": "MAJORITY_AGREE",
+      "leaderOnly": false,
+      "votes": {
+        "0x40533175AfBbAee2c030F88259Afb5aEDbCF0E05": "agree",
+        "0x5Bbbd7cdD63c0ba7f088038Cb049bDDAbE4F6fd1": "agree",
+        "0x8a876C3F3a4783Bd123982bcBF3c672dc0239004": "agree",
+        "0xa21bc502E3578E4b3039be8c59a257198f7c3f19": "agree",
+        "0xf29b6947ed298d139FC2655DB15D868C9AbB3091": "agree"
+      },
+      "createdAt": "2026-10-19T09:36:31.348799+00:00",
+      "observedAt": "2026-10-19T09:39:13.793Z"
+    },
+    {
+      "label": "capture-first",
+      "spec": {
+        "kind": "call",
+        "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+        "actor": "0xEE9eBf43929c75EA00c8d9068E6cb4492890Bd5C",
+        "method": "capture_incident",
+        "args": [
+          "actions-oct12-14",
+          "6yk962mhlr3h",
+          "b50be36bd90e906bb4979f658aac3681c8e3f223e43147f463524bf4f48aaf7e"
+        ],
+        "value": "0",
+        "leaderOnly": false
+      },
+      "intendedAt": "2026-10-19T09:36:39.597Z",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "hash": "0x8ba6fcd98377c7e16b15c8a0d0008fda480871b3e7400b6f0b2a470f45ce5e17",
+      "submittedAt": "2026-10-19T09:36:43.997Z",
+      "executionResult": "SUCCESS",
+      "consensusResult": "MAJORITY_AGREE",
+      "leaderOnly": false,
+      "votes": {
+        "0x1242E9f5bf9b253327f130E8802b7b2F438A21Ef": "idle",
+        "0x1dEcE6A694520b1d3a2e24b9f28500858C756BDb": "agree",
+        "0x5Bbbd7cdD63c0ba7f088038Cb049bDDAbE4F6fd1": "agree",
+        "0xA712cB25a4002666FA9D09477251f238dD9e06b3": "agree",
+        "0xf29b6947ed298d139FC2655DB15D868C9AbB3091": "idle"
+      },
+      "createdAt": "2026-10-19T09:36:43.699072+00:00",
+      "observedAt": "2026-10-19T09:39:15.837Z"
+    },
+    {
+      "label": "evaluate-first",
+      "spec": {
+        "kind": "call",
+        "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+        "actor": "0xEE9eBf43929c75EA00c8d9068E6cb4492890Bd5C",
+        "method": "evaluate",
+        "args": [
+          "actions-oct12-14"
+        ],
+        "value": "0",
+        "leaderOnly": false
+      },
+      "intendedAt": "2026-10-19T09:36:53.068Z",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "hash": "0x468d0247948a197a6003c2355f48cfa738fad7a2d995386d9ff0a334bd53329c",
+      "submittedAt": "2026-10-19T09:37:00.777Z",
+      "executionResult": "SUCCESS",
+      "consensusResult": "MAJORITY_AGREE",
+      "leaderOnly": false,
+      "votes": {
+        "0x2FcBC452425f2F1e102c5c04b4331fcB46ee1c00": "agree",
+        "0x40533175AfBbAee2c030F88259Afb5aEDbCF0E05": "idle",
+        "0x5Bbbd7cdD63c0ba7f088038Cb049bDDAbE4F6fd1": "agree",
+        "0x7bf4Ea55363bbe73A4dd5b3900bf03c978A63b6e": "idle",
+        "0xad7d13f269CeAd4379E64a1A3a0803a827e70B43": "agree"
+      },
+      "createdAt": "2026-10-19T09:37:00.615273+00:00",
+      "observedAt": "2026-10-19T09:39:18.151Z"
+    },
+    {
+      "label": "challenge",
+      "spec": {
+        "kind": "call",
+        "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+        "actor": "0x9bE0FA4597C8F5E43DF781eDC11Fb38af6010f0c",
+        "method": "challenge",
+        "args": [
+          "actions-oct12-14",
+          "86ea229108009883e92c272e3543405c124f2babda7cfd8861229f32232f5807",
+          "The frozen window also includes the October 12 Actions incident. Add its official postmortem before acknowledging the review."
+        ],
+        "value": "0",
+        "leaderOnly": false
+      },
+      "intendedAt": "2026-10-19T09:37:31.938Z",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "hash": "0xca5d100d081dad9155a676b28c6117ba01989e9ab37bb1ca0e08e6c5202aa5b5",
+      "submittedAt": "2026-10-19T09:37:35.185Z",
+      "executionResult": "SUCCESS",
+      "consensusResult": "MAJORITY_AGREE",
+      "leaderOnly": false,
+      "votes": {
+        "0x1dEcE6A694520b1d3a2e24b9f28500858C756BDb": "agree",
+        "0x2FcBC452425f2F1e102c5c04b4331fcB46ee1c00": "agree",
+        "0x5Bbbd7cdD63c0ba7f088038Cb049bDDAbE4F6fd1": "agree",
+        "0xA712cB25a4002666FA9D09477251f238dD9e06b3": "agree",
+        "0xad7d13f269CeAd4379E64a1A3a0803a827e70B43": "agree"
+      },
+      "createdAt": "2026-10-19T09:37:35.056465+00:00",
+      "observedAt": "2026-10-19T09:39:20.358Z"
+    },
+    {
+      "label": "capture-additional",
+      "spec": {
+        "kind": "call",
+        "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+        "actor": "0x9bE0FA4597C8F5E43DF781eDC11Fb38af6010f0c",
+        "method": "capture_incident",
+        "args": [
+          "actions-oct12-14",
+          "93njd414rpbx",
+          "f99b060706bce7b61f41d86d56c6db3fdd12140e11801f1a477b32d29c010e69"
+        ],
+        "value": "0",
+        "leaderOnly": false
+      },
+      "intendedAt": "2026-10-19T09:37:44.048Z",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "hash": "0x88bbdfb5024bf070733b0a715b6ec75642a12511bca8d5c089d91ba0ab9e94fa",
+      "submittedAt": "2026-10-19T09:37:50.310Z",
+      "executionResult": "SUCCESS",
+      "consensusResult": "MAJORITY_AGREE",
+      "leaderOnly": false,
+      "votes": {
+        "0x2FcBC452425f2F1e102c5c04b4331fcB46ee1c00": "agree",
+        "0x40533175AfBbAee2c030F88259Afb5aEDbCF0E05": "idle",
+        "0x6a4179A851B3747A458baD2f089AB2EeFE0eBbAb": "agree",
+        "0x8Ce1805d6970d54748dE7160b5b395dCC5c71F44": "idle",
+        "0x8a876C3F3a4783Bd123982bcBF3c672dc0239004": "agree"
+      },
+      "createdAt": "2026-10-19T09:37:49.982728+00:00",
+      "observedAt": "2026-10-19T09:39:22.625Z"
+    },
+    {
+      "label": "evaluate-revision",
+      "spec": {
+        "kind": "call",
+        "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+        "actor": "0xEE9eBf43929c75EA00c8d9068E6cb4492890Bd5C",
+        "method": "evaluate",
+        "args": [
+          "actions-oct12-14"
+        ],
+        "value": "0",
+        "leaderOnly": false
+      },
+      "intendedAt": "2026-10-19T09:37:58.569Z",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "hash": "0x57bd2d9e8076585e455259afab382e97f512d501ec0a531b2ef793de2a92c7fe",
+      "submittedAt": "2026-10-19T09:38:05.923Z",
+      "executionResult": "SUCCESS",
+      "consensusResult": "MAJORITY_AGREE",
+      "leaderOnly": false,
+      "votes": {
+        "0x40533175AfBbAee2c030F88259Afb5aEDbCF0E05": "agree",
+        "0x5Bbbd7cdD63c0ba7f088038Cb049bDDAbE4F6fd1": "agree",
+        "0x6a4179A851B3747A458baD2f089AB2EeFE0eBbAb": "idle",
+        "0x9244De5F20cB75A0c51d79A9A3208D00a99aFc10": "disagree",
+        "0xad7d13f269CeAd4379E64a1A3a0803a827e70B43": "agree"
+      },
+      "createdAt": "2026-10-19T09:38:05.616063+00:00",
+      "observedAt": "2026-10-19T09:39:24.853Z"
+    },
+    {
+      "label": "acknowledge",
+      "spec": {
+        "kind": "call",
+        "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+        "actor": "0x9bE0FA4597C8F5E43DF781eDC11Fb38af6010f0c",
+        "method": "acknowledge",
+        "args": [
+          "actions-oct12-14",
+          "fbe3d309d9267eac03946f15f0b6ae1719f8aa8cfe7376a136a5b6399d87f481"
+        ],
+        "value": "0",
+        "leaderOnly": false
+      },
+      "intendedAt": "2026-10-19T09:38:55.171Z",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "hash": "0xe3a8f5312dba99145144c016251c0e214821051e34b90ff0107b28d7793a2c99",
+      "submittedAt": "2026-10-19T09:38:59.450Z",
+      "executionResult": "SUCCESS",
+      "consensusResult": "MAJORITY_AGREE",
+      "leaderOnly": false,
+      "votes": {
+        "0x6a4179A851B3747A458baD2f089AB2EeFE0eBbAb": "idle",
+        "0x892C437da9b9CA0b6017B6f046F58E3526B46ec6": "agree",
+        "0x8Ce1805d6970d54748dE7160b5b395dCC5c71F44": "agree",
+        "0xe7eEe8a1c1690b0322d795B80A76ab2Cd1a0eAFd": "idle",
+        "0xf1C7551292319EE334e2D8A24eAC108Bd4C63b21": "agree"
+      },
+      "createdAt": "2026-10-19T09:38:59.091353+00:00",
+      "observedAt": "2026-10-19T09:39:26.863Z"
+    }
+  ]
+}

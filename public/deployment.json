@@ -1,0 +1,27 @@
+{
+  "deployed": true,
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "rpc": "https://studio.genlayer.com/api",
+  "explorer": "https://explorer-studio.genlayer.com",
+  "address": "0x461bCf6a09D2a0358003379dd7B356C91B3074B4",
+  "sourceSha256": "c25dd12beceb4bee7acf1fc34031a473bc256d560adcee6c99c0ff34d7c3d4ab",
+  "deploymentTransaction": "0x7a0a8989cbd0f8a587b5930012eb4e3aaa3e8f297492a5260ba4b96dc0c9d145",
+  "deploymentReceipt": {
+    "status": "ACCEPTED",
+    "execution": "SUCCESS",
+    "executionResult": "SUCCESS",
+    "consensusResult": "MAJORITY_AGREE",
+    "leaderOnly": false,
+    "votes": {
+      "0x1242E9f5bf9b253327f130E8802b7b2F438A21Ef": "agree",
+      "0x17ac0CaefB18205c737e64ee582c9245A28ca1f9": "agree",
+      "0x40533175AfBbAee2c030F88259Afb5aEDbCF0E05": "idle",
+      "0x7bf4Ea55363bbe73A4dd5b3900bf03c978A63b6e": "idle",
+      "0xb0925568bFbCF00aADBcA053E6D0E1628ff3d530": "agree"
+    },
+    "createdAt": "2026-10-19T09:36:07.201804+00:00",
+    "observedAt": "2026-10-19T09:36:17.318Z"
+  },
+  "notice": "Historical official operator statements. Synthetic dispute and self-controlled test actors; no customer incidents, measured uptime, SLA or compensation claims."
+}
